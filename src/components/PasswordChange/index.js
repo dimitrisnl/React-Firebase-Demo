@@ -4,6 +4,7 @@ import { Form, Input, Button, Card, message } from 'components/Ant';
 import { withFirebase } from 'components/Firebase';
 
 const INITIAL_STATE = {
+  passwordOld: '',
   passwordOne: '',
   passwordTwo: '',
 };
@@ -16,10 +17,10 @@ class PasswordChangeForm extends Component {
   }
 
   onSubmit = event => {
-    const { passwordOne } = this.state;
-
-    this.props.firebase
-      .doPasswordUpdate(passwordOne)
+    const { passwordOld, passwordOne } = this.state;
+    const { doPasswordUpdate, doReauthenticateUser } = this.props.firebase;
+    doReauthenticateUser(passwordOld)
+      .then(() => doPasswordUpdate(passwordOne))
       .then(() => {
         this.setState({ ...INITIAL_STATE });
         message.success('Password successfully updated');
@@ -36,13 +37,23 @@ class PasswordChangeForm extends Component {
   };
 
   render() {
-    const { passwordOne, passwordTwo } = this.state;
+    const { passwordOld, passwordOne, passwordTwo } = this.state;
 
-    const isInvalid = passwordOne !== passwordTwo || passwordOne === '';
+    const isInvalid =
+      passwordOne !== passwordTwo || passwordOne === '' || passwordOld === '';
 
     return (
       <Card title="Change Password" style={{ height: '100%' }}>
         <Form onSubmit={this.onSubmit}>
+          <Form.Item>
+            <Input
+              name="passwordOld"
+              value={passwordOld}
+              onChange={this.onChange}
+              type="password"
+              placeholder="Current Password"
+            />
+          </Form.Item>
           <Form.Item>
             <Input
               name="passwordOne"

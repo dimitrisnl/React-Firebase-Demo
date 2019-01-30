@@ -31,14 +31,9 @@ class Firebase {
 
   doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
 
-  doReauthenticateUser = password => {
+  doReauthenticateUser = async password => {
     const user = this.auth.currentUser;
-    const credential = this.auth.EmailAuthProvider.credential(
-      user.email,
-      password
-    );
-
-    return user.reauthenticate(credential);
+    return this.doSignInWithEmailAndPassword(user.email, password);
   };
 
   doDeleteUser = () => this.auth.currentUser.delete();

@@ -2,16 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 
-import {
-  Button,
-  Input,
-  Form,
-  Icon,
-  Checkbox,
-  message,
-  Row,
-  Col,
-} from 'components/Ant';
+import { Button, Input, Form, Icon, message } from 'components/Ant';
 import { withFirebase } from 'components/Firebase';
 import * as ROUTES from 'constants/routes';
 import { PasswordForgetLink } from 'pages/password-forget';
@@ -79,14 +70,7 @@ class SignInFormBase extends Component {
         </Form.Item>
 
         <Form.Item>
-          <Row type="flex" justify="space-between">
-            <Col>
-              <Checkbox>Remember me</Checkbox>
-            </Col>
-            <Col>
-              <PasswordForgetLink />
-            </Col>
-          </Row>
+          <PasswordForgetLink />
         </Form.Item>
 
         <Button disabled={isInvalid} type="primary" htmlType="submit">

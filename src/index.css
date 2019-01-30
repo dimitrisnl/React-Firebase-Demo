@@ -1,14 +1,68 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+@import '~antd/dist/antd.css';
+
+.container {
+  max-width: 1268px;
+  padding: 0 2rem;
+  margin: 0 auto;
+  position: relative;
+}
+
+.ant-layout {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.ant-layout-header {
+  position: fixed;
+  z-index: 2;
+  width: 100%;
+  padding: 0;
+}
+
+.ant-layout-header .brand {
+  height: 31px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px 24px 16px 0;
+  float: left;
+  line-height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  color: #fff;
+  border-radius: 5px;
+}
+
+.ant-layout-header .ant-menu {
+  line-height: 64px;
+}
+
+.ant-layout-header .ant-menu > .ant-menu-item.pull-right {
+  float: right;
+}
+
+.ant-layout-content {
+  flex: 1;
+  padding-top: 64px;
+  margin: 32px 0;
+}
+
+.ant-layout-footer {
+  text-align: center;
+  box-shadow: 0 0 8px 1px #00152920;
 }

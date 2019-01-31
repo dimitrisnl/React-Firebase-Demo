@@ -10,5 +10,5 @@
 
 ## Next steps
 
-- [] Use React hooks
-- [] Drop recompose
+- [ ] Use React hooks
+- [ ] Drop recompose

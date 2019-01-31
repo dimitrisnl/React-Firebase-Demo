@@ -44,7 +44,7 @@ class AccountDeletionBase extends Component {
     const { password } = this.state;
 
     return (
-      <Card title="Change Password" style={{ height: '100%' }}>
+      <Card title="Danger Zone" style={{ height: '100%' }}>
         <Form onSubmit={this.onSubmit}>
           <Form.Item>
             <Input.Password

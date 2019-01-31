@@ -5,8 +5,7 @@ import { withFirebase } from 'components/Firebase';
 
 const INITIAL_STATE = {
   passwordOld: '',
-  passwordOne: '',
-  passwordTwo: '',
+  passwordNew: '',
 };
 
 class PasswordChangeForm extends Component {
@@ -17,10 +16,10 @@ class PasswordChangeForm extends Component {
   }
 
   onSubmit = event => {
-    const { passwordOld, passwordOne } = this.state;
+    const { passwordOld, passwordNew } = this.state;
     const { doPasswordUpdate, doReauthenticateUser } = this.props.firebase;
     doReauthenticateUser(passwordOld)
-      .then(() => doPasswordUpdate(passwordOne))
+      .then(() => doPasswordUpdate(passwordNew))
       .then(() => {
         this.setState({ ...INITIAL_STATE });
         message.success('Password successfully updated');
@@ -37,16 +36,15 @@ class PasswordChangeForm extends Component {
   };
 
   render() {
-    const { passwordOld, passwordOne, passwordTwo } = this.state;
+    const { passwordOld, passwordNew } = this.state;
 
-    const isInvalid =
-      passwordOne !== passwordTwo || passwordOne === '' || passwordOld === '';
+    const isInvalid = passwordNew === '' || passwordOld === '';
 
     return (
       <Card title="Change Password" style={{ height: '100%' }}>
         <Form onSubmit={this.onSubmit}>
           <Form.Item>
-            <Input
+            <Input.Password
               name="passwordOld"
               value={passwordOld}
               onChange={this.onChange}
@@ -55,21 +53,12 @@ class PasswordChangeForm extends Component {
             />
           </Form.Item>
           <Form.Item>
-            <Input
-              name="passwordOne"
-              value={passwordOne}
+            <Input.Password
+              name="passwordNew"
+              value={passwordNew}
               onChange={this.onChange}
               type="password"
               placeholder="New Password"
-            />
-          </Form.Item>
-          <Form.Item>
-            <Input
-              name="passwordTwo"
-              value={passwordTwo}
-              onChange={this.onChange}
-              type="password"
-              placeholder="Confirm New Password"
             />
           </Form.Item>
           <Button disabled={isInvalid} htmlType="submit">

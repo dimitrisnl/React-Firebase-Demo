@@ -18,6 +18,8 @@ import Calendar from 'antd/lib/calendar';
 import Badge from 'antd/lib/badge';
 import Modal from 'antd/lib/modal';
 import Avatar from 'antd/lib/avatar';
+import DatePicker from 'antd/lib/date-picker';
+import Popover from 'antd/lib/popover';
 
 import message from 'antd/lib/message';
 
@@ -42,5 +44,7 @@ export {
   Badge,
   Modal,
   Avatar,
+  DatePicker,
+  Popover,
   message,
 };

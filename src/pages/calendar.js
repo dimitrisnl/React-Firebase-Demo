@@ -1,89 +1,152 @@
 import React, { Component } from 'react';
-
+import moment from 'moment';
 import { withAuthorization } from 'components/Session';
-import { Card, BackTop, Calendar, Badge } from 'components/Ant';
+import { Card, BackTop, Calendar, Button, Popover } from 'components/Ant';
+import EventModal from 'components/EventModal';
 
-function getListData(value) {
-  let listData;
-  switch (value.date()) {
-    case 8:
-      listData = [
-        { type: 'warning', content: 'This is warning event.' },
-        { type: 'success', content: 'This is usual event.' },
-      ];
-      break;
-    case 10:
-      listData = [
-        { type: 'warning', content: 'This is warning event.' },
-        { type: 'success', content: 'This is usual event.' },
-        { type: 'error', content: 'This is error event.' },
-      ];
-      break;
-    case 15:
-      listData = [
-        { type: 'warning', content: 'This is warning event' },
-        { type: 'success', content: 'This is very long usual event。。....' },
-        { type: 'error', content: 'This is error event 1.' },
-        { type: 'error', content: 'This is error event 2.' },
-        { type: 'error', content: 'This is error event 3.' },
-        { type: 'error', content: 'This is error event 4.' },
-      ];
-      break;
-    default:
-  }
-  return listData || [];
-}
+const EVENT_STYLE = {
+  background: '#52c41a70',
+  height: '16px',
+  marginBottom: '4px',
+  borderRadius: '3px',
+  borderLeft: '3px solid #46a219',
+  fontSize: '11px',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
+  paddingLeft: '3px',
+  zIndex: 2,
+};
 
-function dateCellRender(value) {
-  const listData = getListData(value);
-  return (
-    <ul className="events">
-      {listData.map(item => (
-        <li key={item.content}>
-          <Badge status={item.type} text={item.content} />
-        </li>
-      ))}
-    </ul>
-  );
-}
+const EVENTS = [
+  { id: 1, date: moment(), title: 'Add more events!' },
+  { id: 2, date: moment(), title: 'Add more events!' },
+  { id: 3, date: moment().subtract(1, 'days'), title: 'Add more events!' },
+  { id: 4, date: moment().subtract(3, 'days'), title: 'Add more events!' },
+  { id: 5, date: moment().subtract(3, 'days'), title: 'Add more events!' },
+  { id: 6, date: moment().subtract(4, 'days'), title: 'Add more events!' },
+  { id: 7, date: moment().subtract(7, 'days'), title: 'Add more events!' },
+  { id: 8, date: moment().add(2, 'days'), title: 'Add more events!' },
+  { id: 9, date: moment().add(2, 'days'), title: 'Add more events!' },
+  { id: 10, date: moment().add(5, 'days'), title: 'Add more events!' },
+  { id: 11, date: moment().add(7, 'days'), title: 'Add more events!' },
+  { id: 12, date: moment().subtract(12, 'days'), title: 'Add more events!' },
+  { id: 13, date: moment().subtract(14, 'days'), title: 'Add more events!' },
+];
 
-function getMonthData(value) {
-  if (value.month() === 8) {
-    return 1394;
-  }
-}
-
-function monthCellRender(value) {
-  const num = getMonthData(value);
-  return num ? (
-    <div className="notes-month">
-      <section>{num}</section>
-      <span>Backlog number</span>
-    </div>
-  ) : null;
-}
+const INITIAL_STATE = {
+  isModalVisible: false,
+  action: 'Add',
+  activeEvent: null,
+  events: [...EVENTS],
+};
 
 class CalendarPage extends Component {
-  state = {};
+  state = { ...INITIAL_STATE };
+
   onSelect = value => {
     this.setState({
-      value,
-      selectedValue: value,
+      isModalVisible: true,
+      activeEvent: {
+        date: value,
+        title: '',
+      },
     });
   };
 
+  onModalClose = () =>
+    this.setState({ activeEvent: null, action: 'Add', isModalVisible: false });
+
+  onModalAction = updatedEvent => {
+    const events = this.state.events.filter(
+      event => event.id !== updatedEvent.id
+    );
+
+    this.setState({ events: [...events, updatedEvent] });
+    this.onModalClose();
+  };
+
+  onDeleteEvent = id =>
+    this.setState({
+      events: this.state.events.filter(event => event.id !== id),
+    });
+
+  onEditEvent = event => {
+    this.setState({
+      isModalVisible: true,
+      action: 'Edit',
+      activeEvent: { ...event },
+    });
+  };
+
+  dateCellRender = value => {
+    const { events } = this.state;
+    return events
+      .filter(event => event.date.isSame(value, 'day'))
+      .map(event => (
+        <Popover
+          title={event.title}
+          content={
+            <>
+              <Button.Group>
+                <Button
+                  onClick={e =>
+                    e.stopPropagation() & this.onDeleteEvent(event.id)
+                  }
+                >
+                  Delete
+                </Button>
+
+                <Button
+                  onClick={e => e.stopPropagation() & this.onEditEvent(event)}
+                >
+                  Edit
+                </Button>
+              </Button.Group>
+            </>
+          }
+          key={event.id}
+        >
+          <div style={EVENT_STYLE}>{event.title}</div>
+        </Popover>
+      ));
+  };
+
   render() {
-    const { selectedValue } = this.state;
+    const { isModalVisible, activeEvent, action } = this.state;
     return (
       <>
         <BackTop />
-        <div>{`You selected date: ${selectedValue &&
-          selectedValue.format('YYYY-MM-DD')}`}</div>
+        <h2>Calendar</h2>
+        <p>
+          Add & Edit events. These are <b>not</b> persisted in Firebase.
+        </p>
+        <Button
+          onClick={() =>
+            this.setState({
+              isModalVisible: true,
+              action: 'Add',
+              activeEvent: null,
+            })
+          }
+          icon="plus"
+          type="primary"
+          style={{ margin: '8px 0 16px' }}
+        >
+          Add new event
+        </Button>
 
-        <Card title="Calendar">
+        <EventModal
+          isModalVisible={isModalVisible}
+          action={action}
+          event={activeEvent}
+          onOk={this.onModalAction}
+          onCancel={this.onModalClose}
+        />
+
+        <Card>
           <Calendar
-            dateCellRender={dateCellRender}
-            monthCellRender={monthCellRender}
+            dateCellRender={this.dateCellRender}
             onSelect={this.onSelect}
           />
         </Card>

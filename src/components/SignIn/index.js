@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 
-import { Button, Input, Form, Icon, message } from 'components/Ant';
+import { Button, Input, Form, Icon, Row, Col, message } from 'components/Ant';
 import { withFirebase } from 'components/Firebase';
 import * as ROUTES from 'constants/routes';
 import { PasswordForgetLink } from 'pages/password-forget';
@@ -12,6 +12,7 @@ const SignInPage = () => <SignInForm />;
 const INITIAL_STATE = {
   email: '',
   password: '',
+  loading: false,
 };
 
 class SignInFormBase extends Component {
@@ -23,7 +24,7 @@ class SignInFormBase extends Component {
 
   onSubmit = event => {
     const { email, password } = this.state;
-
+    this.setState({ loading: true });
     this.props.firebase
       .doSignInWithEmailAndPassword(email, password)
       .then(() => {
@@ -32,6 +33,7 @@ class SignInFormBase extends Component {
       })
       .catch(error => {
         message.error(error.message);
+        this.setState({ loading: false });
       });
 
     event.preventDefault();
@@ -42,7 +44,7 @@ class SignInFormBase extends Component {
   };
 
   render() {
-    const { email, password } = this.state;
+    const { email, password, loading } = this.state;
 
     const isInvalid = password === '' || email === '';
 
@@ -59,7 +61,7 @@ class SignInFormBase extends Component {
           />
         </Form.Item>
         <Form.Item>
-          <Input
+          <Input.Password
             prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
             name="password"
             value={password}
@@ -69,13 +71,21 @@ class SignInFormBase extends Component {
           />
         </Form.Item>
 
-        <Form.Item>
-          <PasswordForgetLink />
-        </Form.Item>
-
-        <Button disabled={isInvalid} type="primary" htmlType="submit">
-          Sign In
-        </Button>
+        <Row type="flex" justify="space-between">
+          <Col>
+            <Button
+              loading={loading}
+              disabled={isInvalid}
+              type="primary"
+              htmlType="submit"
+            >
+              Sign in
+            </Button>
+          </Col>
+          <Col>
+            <PasswordForgetLink />
+          </Col>
+        </Row>
       </Form>
     );
   }

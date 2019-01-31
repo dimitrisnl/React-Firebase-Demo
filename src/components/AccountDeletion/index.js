@@ -13,7 +13,6 @@ const INITIAL_STATE = {
 class AccountDeletionBase extends Component {
   constructor(props) {
     super(props);
-
     this.state = { ...INITIAL_STATE };
   }
 
@@ -48,7 +47,7 @@ class AccountDeletionBase extends Component {
       <Card title="Change Password" style={{ height: '100%' }}>
         <Form onSubmit={this.onSubmit}>
           <Form.Item>
-            <Input
+            <Input.Password
               name="password"
               value={password}
               onChange={this.onChange}

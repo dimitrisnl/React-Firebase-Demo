@@ -61,7 +61,7 @@ class ActivitiesPage extends Component {
     return (
       <>
         <BackTop />
-        <h2>Activities Page</h2>
+        <h2>Activities</h2>
         <p>
           Let's generate some activities using{' '}
           <a

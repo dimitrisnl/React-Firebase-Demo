@@ -8,8 +8,8 @@ import * as ROUTES from 'constants/routes';
 
 const INITIAL_STATE = {
   email: '',
-  passwordOne: '',
-  passwordTwo: '',
+  password: '',
+  loading: false,
 };
 
 class SignUpFormBase extends Component {
@@ -19,16 +19,18 @@ class SignUpFormBase extends Component {
   }
 
   onSubmit = event => {
-    const { email, passwordOne } = this.state;
+    const { email, password } = this.state;
+    this.setState({ loading: true });
 
     this.props.firebase
-      .doCreateUserWithEmailAndPassword(email, passwordOne)
+      .doCreateUserWithEmailAndPassword(email, password)
       .then(() => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.HOME);
       })
       .catch(error => {
         message.error(error.message);
+        this.setState({ loading: false });
       });
 
     event.preventDefault();
@@ -38,10 +40,9 @@ class SignUpFormBase extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
   render() {
-    const { email, passwordOne, passwordTwo } = this.state;
+    const { email, password, loading } = this.state;
 
-    const isInvalid =
-      passwordOne !== passwordTwo || passwordOne === '' || email === '';
+    const isInvalid = password === '' || email === '';
     return (
       <Form onSubmit={this.onSubmit}>
         <Form.Item>
@@ -55,27 +56,22 @@ class SignUpFormBase extends Component {
           />
         </Form.Item>
         <Form.Item>
-          <Input
+          <Input.Password
             prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-            name="passwordOne"
-            value={passwordOne}
+            name="password"
+            value={password}
             onChange={this.onChange}
             type="password"
             placeholder="Password"
           />
         </Form.Item>
-        <Form.Item>
-          <Input
-            prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-            name="passwordTwo"
-            value={passwordTwo}
-            onChange={this.onChange}
-            type="password"
-            placeholder="Confirm Password"
-          />
-        </Form.Item>
-        <Button disabled={isInvalid} htmlType="submit">
-          Sign Up
+        <Button
+          loading={loading}
+          type="primary"
+          disabled={isInvalid}
+          htmlType="submit"
+        >
+          Sign up
         </Button>
       </Form>
     );

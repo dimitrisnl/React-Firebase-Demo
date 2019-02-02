@@ -10,7 +10,7 @@ class NavigationAuthBase extends PureComponent {
   constructor(props) {
     super(props);
     const { pathname } = props.location;
-    const cleanPathnane = pathname.replace(/\//g, '');
+    const cleanPathnane = pathname.replace(/\/app\//g, '');
     this.state = {
       active: cleanPathnane,
     };
@@ -24,31 +24,31 @@ class NavigationAuthBase extends PureComponent {
 
   render() {
     return (
-      <Menu
-        mode="horizontal"
-        theme="dark"
-        onClick={this.handleClick}
-        selectedKeys={[this.state.active]}
-      >
-        <Menu.Item key="activities">
-          <Link to={ROUTES.HOME}>Activities</Link>
-        </Menu.Item>
-        <Menu.Item key="users">
-          <Link to={ROUTES.USERS}>Users</Link>
-        </Menu.Item>
-        <Menu.Item key="calendar">
-          <Link to={ROUTES.CALENDAR}>Calendar</Link>
-        </Menu.Item>
-        <Menu.Item key="account">
-          <Link to={ROUTES.ACCOUNT}>Account</Link>
-        </Menu.Item>
-
-        <Menu.Item className="pull-right">
-          <div>
-            <SignOutButton />
-          </div>
-        </Menu.Item>
-      </Menu>
+      <>
+        <Menu
+          mode="vertical"
+          theme="dark"
+          onClick={this.handleClick}
+          selectedKeys={[this.state.active]}
+          style={{flex: 1, height: '100%'}}
+        >
+          <Menu.Item key="activities">
+            <Link to={ROUTES.HOME}>Activities</Link>
+          </Menu.Item>
+          <Menu.Item key="users">
+            <Link to={ROUTES.USERS}>Users</Link>
+          </Menu.Item>
+          <Menu.Item key="calendar">
+            <Link to={ROUTES.CALENDAR}>Calendar</Link>
+          </Menu.Item>
+          <Menu.Item key="account">
+            <Link to={ROUTES.ACCOUNT}>Account</Link>
+          </Menu.Item>
+        </Menu>
+        <div style={{ marginTop: 'auto', padding: '16px' }}>
+          <SignOutButton />
+        </div>
+      </>
     );
   }
 }

@@ -5,6 +5,7 @@ import { withFirebase } from 'components/Firebase';
 
 const SignOutButton = ({ firebase }) => (
   <Button
+  block
     ghost
     icon="logout"
     type="danger"

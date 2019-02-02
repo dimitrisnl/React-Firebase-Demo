@@ -28,38 +28,40 @@ code {
   flex-direction: column;
 }
 
-.ant-layout-header {
+.ant-layout-sider {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  height: 100vh;
   position: fixed;
-  z-index: 2;
-  width: 100%;
-  padding: 0;
+  left: 0;
 }
 
-.ant-layout-header .brand {
-  height: 31px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 16px 24px 16px 0;
-  float: left;
-  line-height: 64px;
+.ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+}
+
+.ant-layout-sider .brand {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   padding: 0 16px;
-  color: #fff;
-  border-radius: 5px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1;
+  height: 64px;
+  font-size: 16px;
+  margin-bottom: 16px;
 }
 
-.ant-layout-header .ant-menu {
-  line-height: 64px;
-}
-
-.ant-layout-header .ant-menu > .ant-menu-item.pull-right {
-  float: right;
-}
 
 .ant-layout-content {
   flex: 1;
-  padding-top: 64px;
-  margin: 32px 0;
+  padding-top: 20px;
+}
+
+.ant-layout-content#dashboard-view {
+    margin-left: 200px;
 }
 
 .ant-layout-footer {

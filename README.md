@@ -12,3 +12,4 @@
 
 - [ ] Use React hooks
 - [ ] Drop recompose
+- [ ] Try a different UI library

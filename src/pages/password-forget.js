@@ -1,19 +1,14 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import { compose } from 'recompose';
 
+import { Card, Row, Col, Button, Form, Input, message } from 'components/Ant';
 import { withFirebase } from 'components/Firebase';
 import * as ROUTES from 'constants/routes';
 
-const PasswordForgetPage = () => (
-  <div>
-    <h1>PasswordForget</h1>
-    <PasswordForgetForm />
-  </div>
-);
-
 const INITIAL_STATE = {
   email: '',
-  error: null,
+  loading: false,
 };
 
 class PasswordForgetFormBase extends Component {
@@ -25,14 +20,18 @@ class PasswordForgetFormBase extends Component {
 
   onSubmit = event => {
     const { email } = this.state;
+    this.setState({ loading: true });
 
     this.props.firebase
       .doPasswordReset(email)
       .then(() => {
+        message.success('Instructions sent to your email.');
+        this.props.history.push(ROUTES.LANDING);
         this.setState({ ...INITIAL_STATE });
       })
       .catch(error => {
-        this.setState({ error });
+        message.error(error.message);
+        this.setState({ loading: false });
       });
 
     event.preventDefault();
@@ -43,25 +42,36 @@ class PasswordForgetFormBase extends Component {
   };
 
   render() {
-    const { email, error } = this.state;
+    const { email, loading } = this.state;
 
     const isInvalid = email === '';
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          name="email"
-          value={this.state.email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Email Address"
-        />
-        <button disabled={isInvalid} type="submit">
-          Reset My Password
-        </button>
-
-        {error && <p>{error.message}</p>}
-      </form>
+      <Row type="flex" justify="center">
+        <Col xs={24} md={11}>
+          <Card>
+            <Form onSubmit={this.onSubmit}>
+              <Form.Item>
+                <Input
+                  name="email"
+                  value={this.state.email}
+                  onChange={this.onChange}
+                  type="text"
+                  placeholder="Email Address"
+                />
+              </Form.Item>
+              <Button
+                loading={loading}
+                type="primary"
+                disabled={isInvalid}
+                htmlType="submit"
+              >
+                Reset My Password
+              </Button>
+            </Form>
+          </Card>
+        </Col>
+      </Row>
     );
   }
 }
@@ -70,8 +80,11 @@ const PasswordForgetLink = () => (
   <Link to={ROUTES.PASSWORD_FORGET}>Forgot Password?</Link>
 );
 
-export default PasswordForgetPage;
+const PasswordForgetForm = compose(
+  withRouter,
+  withFirebase
+)(PasswordForgetFormBase);
 
-const PasswordForgetForm = withFirebase(PasswordForgetFormBase);
+export default PasswordForgetForm;
 
 export { PasswordForgetForm, PasswordForgetLink };

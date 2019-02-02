@@ -10,58 +10,64 @@ import UsersPage from 'pages/users';
 
 import { Layout } from 'components/Ant';
 import Navigation from 'components/Navigation';
+import Weather from 'components/Weather';
 import { withAuthentication } from 'components/Session';
 
 import * as ROUTES from 'constants/routes';
 
-const { Header, Content, Footer, Sider } = Layout;
-
+const { Header, Content, Sider } = Layout;
 
 const App = () => (
   <Router>
-      <Switch>
-        {/* Authenticated */}
-        <Route path="/app">
-          <Layout>
-            <Sider>
-              <div className="brand">Dashboard in React</div>
-              <Navigation />{' '}
-            </Sider>
-            <Layout>
-              <Header style={{ background: '#fff', padding: 0 }} />
-              <Content id="dashboard-view">
-                <div className="container">
-                  <Route path={ROUTES.HOME} component={ActivitiesPage} />
-                  <Route path={ROUTES.USERS} component={UsersPage} />
-                  <Route path={ROUTES.ACCOUNT} component={AccountPage} />
-                  <Route path={ROUTES.CALENDAR} component={CalendarPage} />
-                </div>
-              </Content>
-              <Footer>React w/ Firebase Example</Footer>
-            </Layout>
+    <Switch>
+      {/* Authenticated */}
+      <Route path="/app">
+        <Layout id="dashboard-view">
+          <Sider>
+            <div className="brand">Dashboard in React</div>
+            <Navigation />{' '}
+          </Sider>
+          <Layout >
+            <Header>
+              <Weather />
+            </Header>
+            <Content>
+              <div className="container">
+                <Route path={ROUTES.HOME} component={ActivitiesPage} />
+                <Route path={ROUTES.USERS} component={UsersPage} />
+                <Route path={ROUTES.ACCOUNT} component={AccountPage} />
+                <Route path={ROUTES.CALENDAR} component={CalendarPage} />
+              </div>
+            </Content>
           </Layout>
-        </Route>
+        </Layout>
+      </Route>
 
-        {/* Non-authenticated */}
-        <Route path="/">
-          <Switch>
-            <Layout>
-              <Header style={{ background: '#fff', padding: '0 24px', textAlign:'center' }}>
-              <Link to='/'>Dashboard in React</Link>
-              </Header>
-              <Content>
-                <div className="container">
-                  <Route exact path={ROUTES.LANDING} component={LandingPage} />
-                  <Route
-                    path={ROUTES.PASSWORD_FORGET}
-                    component={PasswordForgetPage}
-                  />
-                </div>
-              </Content>
-            </Layout>
-          </Switch>
-        </Route>
-      </Switch>
+      {/* Non-authenticated */}
+      <Route path="/">
+        <Layout>
+          <Header
+            style={{
+              background: '#fff',
+              padding: '0 24px',
+              textAlign: 'center',
+              fontSize:'18px'
+            }}
+          >
+            <Link to="/">Dashboard in React</Link>
+          </Header>
+          <Content>
+            <div className="container">
+              <Route exact path={ROUTES.LANDING} component={LandingPage} />
+              <Route
+                path={ROUTES.PASSWORD_FORGET}
+                component={PasswordForgetPage}
+              />
+            </div>
+          </Content>
+        </Layout>
+      </Route>
+    </Switch>
   </Router>
 );
 

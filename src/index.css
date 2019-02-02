@@ -54,14 +54,18 @@ code {
   margin-bottom: 16px;
 }
 
-
 .ant-layout-content {
   flex: 1;
-  padding-top: 20px;
+  padding-top: 2rem;
 }
 
-.ant-layout-content#dashboard-view {
-    margin-left: 200px;
+#dashboard-view .ant-layout {
+  margin-left: 200px;
+}
+
+#dashboard-view .ant-layout .ant-layout-header {
+  background: #fff;
+  padding: 0 24px;
 }
 
 .ant-layout-footer {

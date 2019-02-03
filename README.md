@@ -10,6 +10,8 @@
 - Firebase `5.8.1` for auth
 - Ant Design `3.13.x` for quick styling
 
+![demo](meta/demo.png)
+
 ## Next steps
 
 - [ ] Use React hooks

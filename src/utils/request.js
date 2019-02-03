@@ -21,8 +21,8 @@ const request = (url, { headers, body, ...options }) =>
     ...options,
     headers: {
       ...headers,
-      'Content-Type': 'application/json; charset=utf-8',
-      'X-Requested-With': 'XMLHttpRequest',
+      // 'Content-Type': 'application/json; charset=utf-8',
+      // 'X-Requested-With': 'XMLHttpRequest',
     },
     ...{ ...(body ? { body: JSON.stringify(normalizeData(body)) } : {}) },
   }).then(response => {
